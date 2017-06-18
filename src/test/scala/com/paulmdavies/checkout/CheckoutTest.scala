@@ -52,7 +52,31 @@ class CheckoutTest extends FlatSpec with Matchers {
         cost should be("£0.60")
     }
 
-    it should "throw an exception if a product other than orange or apple appears in basket" in {
+    it should "apply a three-for-two offer on oranges" in {
+        // Given
+        val checkout = new Checkout()
+        val basket = List("Orange", "Orange", "Orange")
+
+        // When
+        val cost = checkout.scanItems(basket)
+
+        // Then
+        cost should be("£0.50")
+    }
+
+    it should "correctly price a basket of oranges and apples" in {
+        // Given
+        val checkout = new Checkout()
+        val basket = List.fill(11)("Apple") ++ List.fill(10)("Orange")
+
+        // When
+        val cost = checkout.scanItems(basket)
+
+        // Then
+        cost should be("£5.35")
+    }
+
+    it should "throw an exception if an unknown product appears in basket" in {
         // Given
         val checkout = new Checkout()
         val basket = List("Potato")
